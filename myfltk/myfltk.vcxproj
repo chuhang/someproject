@@ -78,12 +78,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bot.cpp" />
     <ClCompile Include="BuddyList.cpp" />
+    <ClCompile Include="ConnListener.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WindowList.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bot.h" />
     <ClInclude Include="BuddyList.h" />
+    <ClInclude Include="ConnListener.h" />
     <ClInclude Include="WindowList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
