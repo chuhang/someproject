@@ -4,7 +4,6 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Text_Display.H>
-#include "BuddyList.h"
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Input.H>
 #include "Bot.h"
@@ -15,7 +14,6 @@ using namespace gloox;
 //global variables. Obviously the best way is define a class for everything in the main()
 //however for now using global variables is the way for sharing contents
 //will change later
-BuddyList mybuddylist;
 Fl_Window* addbuddywindowglobal;
 Fl_Input* addinputglobal;
 
@@ -53,6 +51,10 @@ void buttonAdd_CB(Fl_Widget* o,void* data)
 	addbuddywindowglobal->hide();
 	string newbuddy=addinputglobal->value();
 	cout<<"This is what you typed in: "<<newbuddy<<endl;
+	ofstream buddylog("mybuddies.logfile",ios_base::app);
+	buddylog<<newbuddy<<endl;
+	buddylog.close();
+	mybuddylist.addBuddy(newbuddy);
 	//add newbuddy to mybuddylist
 	//then store mybuddylist in a local txt file
 	//haven't finish yet
@@ -89,5 +91,6 @@ int main()
 	buttonAdd.callback(buttonAdd_CB);
 
 	win.show();
+	mybuddylist.readLog();
 	return Fl::run();
 }

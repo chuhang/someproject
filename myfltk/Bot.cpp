@@ -123,9 +123,19 @@ ConnectionError Bot::receiveMsg()
 
 void Bot::sendChecking()
 {
-	JID buddyjid("chuhang1122@gmail.com");
+	string tmp=mybuddylist.head->buddyJID;
+	JID buddyjid(tmp);
 	Message checkmsg(Message::Chat,buddyjid,"C");
 	client->send(checkmsg);
+	BuddyNode* p=mybuddylist.head;
+	while (p->next)
+	{
+		p=p->next;
+		tmp=p->buddyJID;
+		JID buddyjid(tmp);
+		Message checkmsg(Message::Chat,buddyjid,"C");
+		client->send(checkmsg);
+	}
 }
 
 Bot::~Bot() 

@@ -1,6 +1,8 @@
 //A struct for storing all the buddies
 //In the form of linked list
 #include <string>
+#include <iostream>
+#include <fstream>
 using namespace std;
 
 struct BuddyNode
@@ -18,4 +20,7 @@ struct BuddyList
 
 	BuddyList();
 	void addBuddy(string jid);
+	void readLog();
 };
+
+extern BuddyList mybuddylist;
