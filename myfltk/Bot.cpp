@@ -183,16 +183,41 @@ void Bot::handleMessage( const Message& stanza, MessageSession* session )
 	{
 		int inNum=inMsg[1]-'0';
 		cout<<"Buddy is telling me something with inNum = "<<inNum<<endl;
+		int buddyid=mybuddylist.inList(stanza.from().bare());
+		cout<<"Which buddy is this? "<<buddyid<<endl;
 		buddyswindows.addwindow_ind(inMsg,inNum);
+		mybuddylist.addWindow_BuddyID(buddyid,inMsg,inNum);
 	}
 	if (inMsgType==3)
 	{
 		string uishow;
-		for (int i=0;i<buddyswindows.win_num;i++)
+		/*for (int i=0;i<buddyswindows.win_num;i++)
 		{
 			cout<<"Buddys window"<<to_string(i)+": "+buddyswindows.content[i]<<endl;
 			uishow=uishow+buddyswindows.content[i]+'\n';
+		}*/
+		if (mybuddylist.head!=mybuddylist.rear)
+		{
+			BuddyNode* p=mybuddylist.head;
+			while (1)
+			{
+				uishow=uishow+"----------\n";
+				uishow=uishow+(p->buddyJID)+'\n';
+				for (int i=0;i<p->onebuddywindowlist.win_num;i++)
+				{
+					uishow=uishow+(p->onebuddywindowlist.content[i])+'\n';
+				}
+				if (!p->next)
+				{
+					break;
+				}
+				else
+				{
+					p=p->next;
+				}
+			}
 		}
+		uishow=uishow+"----------\n";
 		const char *uishowchar = uishow.c_str();
 		displaywidget->text(uishowchar);
 	}

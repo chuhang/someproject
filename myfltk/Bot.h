@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <tchar.h>
-#include "WindowList.h"
 #include "BuddyList.h"
 using namespace std;
 using namespace gloox;
