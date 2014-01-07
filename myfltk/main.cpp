@@ -7,6 +7,8 @@
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Input.H>
 #include "Bot.h"
+#include "config.h"
+#include "threads.h"
 
 using namespace std;
 using namespace gloox;
@@ -16,6 +18,10 @@ using namespace gloox;
 //will change later
 Fl_Window* addbuddywindowglobal;
 Fl_Input* addinputglobal;
+
+Fl_Thread prime_thread;
+int n=0;
+void* thread_periodical(void* p);
 
 //**********Section FLTK**********
 //These are the callback functions that menus and buttons in the FLTK interface use
@@ -55,14 +61,13 @@ void buttonAdd_CB(Fl_Widget* o,void* data)
 	buddylog<<newbuddy<<endl;
 	buddylog.close();
 	mybuddylist.addBuddy(newbuddy);
-	//add newbuddy to mybuddylist
-	//then store mybuddylist in a local txt file
-	//haven't finish yet
 }
 //**********Section FLTK**********
 
 int main() 
 {
+	MyFunc();
+	cout<<"win_num = "<<openedwindows.win_num<<endl;
 	Fl_Window win(320,290,"Testing");
 	win.begin();
 		Fl_Button buttonRecv(10,240,140,30,"Receive Message");
@@ -92,5 +97,29 @@ int main()
 
 	win.show();
 	mybuddylist.readLog();
-	return Fl::run();
+
+	Fl::lock();
+	fl_create_thread(prime_thread, thread_periodical, &b);
+	Fl::run();
+	return 0;
+}
+
+void* thread_periodical(void* p)
+{
+	Bot* b = (Bot*) p;
+
+	while (1)
+	{
+		Sleep(1000);
+		cout<<"sleep ends!"<<endl;
+		string s;
+		s=to_string(n);
+		Fl::lock();
+		//MyFunc();
+		b->receiveMsg();
+		Fl::awake();
+		Fl::unlock();
+		//Fl::awake(mycallback,b);
+	}
+	return 0L;
 }

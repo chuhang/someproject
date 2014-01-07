@@ -67,7 +67,7 @@ BOOL IsAltTabWindow(HWND hwnd)
 
 BOOL CALLBACK MyEnumProc(HWND hWnd, LPARAM lParam)
 {
-    TCHAR title[500];
+	TCHAR title[500];
     ZeroMemory(title, sizeof(title));
     
     //string strTitle;
@@ -93,7 +93,7 @@ BOOL CALLBACK MyEnumProc(HWND hWnd, LPARAM lParam)
 
 void MyFunc(void)
 {
-    EnumWindows(MyEnumProc, 0);
+	EnumWindows(MyEnumProc, 0);
 }
 
 Bot::Bot(Fl_Text_Buffer* o) 
@@ -117,7 +117,7 @@ Bot::Bot(Fl_Text_Buffer* o)
 
 ConnectionError Bot::receiveMsg()
 {
-	ConnectionError ce = client->recv();
+	ConnectionError ce = client->recv(100);
 	return ce;
 }
 
@@ -146,10 +146,10 @@ Bot::~Bot()
  
 void Bot::handleMessage( const Message& stanza, MessageSession* session ) 
 {
-    cout << "Received message: " << stanza << endl;
+	cout << "Received message (function handleMessage): " << stanza << endl;
 	int inMsgType=0;
 	string inMsg=stanza.body();
-	if (inMsg.length()>0)
+	if ((inMsg.length()>0) && (stanza.subtype()!=2))
 	{
 		if (inMsg[0]=='C')
 		{
@@ -166,10 +166,9 @@ void Bot::handleMessage( const Message& stanza, MessageSession* session )
 	}
 	if (inMsgType==1)
 	{
-		openedwindows.initialize();
-		MyFunc();
-		//Message msg(Message::Chat,stanza.from(),"I am doing: ");
-		//client->send(msg);
+		//openedwindows.initialize();
+		//MyFunc();
+		cout<<"win_num = "<<openedwindows.win_num<<endl;
 		for (int i=0;i<openedwindows.win_num;i++)
 		{
 			Message newmsg(Message::Chat,stanza.from(),'T'+to_string(i)+": "+openedwindows.content[i]);
@@ -191,17 +190,12 @@ void Bot::handleMessage( const Message& stanza, MessageSession* session )
 	if (inMsgType==3)
 	{
 		string uishow;
-		/*for (int i=0;i<buddyswindows.win_num;i++)
-		{
-			cout<<"Buddys window"<<to_string(i)+": "+buddyswindows.content[i]<<endl;
-			uishow=uishow+buddyswindows.content[i]+'\n';
-		}*/
+		uishow=uishow+"----------\n";
 		if (mybuddylist.head!=mybuddylist.rear)
 		{
 			BuddyNode* p=mybuddylist.head;
 			while (1)
 			{
-				uishow=uishow+"----------\n";
 				uishow=uishow+(p->buddyJID)+'\n';
 				for (int i=0;i<p->onebuddywindowlist.win_num;i++)
 				{
@@ -215,6 +209,7 @@ void Bot::handleMessage( const Message& stanza, MessageSession* session )
 				{
 					p=p->next;
 				}
+				uishow=uishow+"----------\n";
 			}
 		}
 		uishow=uishow+"----------\n";

@@ -87,7 +87,9 @@
   <ItemGroup>
     <ClInclude Include="Bot.h" />
     <ClInclude Include="BuddyList.h" />
+    <ClInclude Include="config.h" />
     <ClInclude Include="ConnListener.h" />
+    <ClInclude Include="threads.h" />
     <ClInclude Include="WindowList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

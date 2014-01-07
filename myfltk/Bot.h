@@ -1,6 +1,11 @@
 #include <message.h>
 #include <messagehandler.h>
 #include <FL/Fl_Text_Display.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_Input.H>
 #include <string>
 #include <client.h>
 #include "ConnListener.h"
@@ -39,6 +44,7 @@ ostream& operator<<(ostream& os, const Message& stanza);
 class Bot : public MessageHandler 
 {
 public:
+	Fl_Text_Buffer* displaywidget;
     Bot(Fl_Text_Buffer* o);
 	ConnectionError receiveMsg();
     ~Bot();
@@ -47,5 +53,4 @@ public:
 private:
     Client* client;
     ConnListener* connListener;
-    Fl_Text_Buffer* displaywidget;
 };
