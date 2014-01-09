@@ -19,9 +19,11 @@ using namespace gloox;
 Fl_Window* addbuddywindowglobal;
 Fl_Input* addinputglobal;
 
-Fl_Thread prime_thread;
+Fl_Thread recv_thread;
+Fl_Thread myfunc_thread;
 int n=0;
 void* thread_periodical(void* p);
+void* thread_periodical2(void* p);
 
 //**********Section FLTK**********
 //These are the callback functions that menus and buttons in the FLTK interface use
@@ -99,7 +101,8 @@ int main()
 	mybuddylist.readLog();
 
 	Fl::lock();
-	fl_create_thread(prime_thread, thread_periodical, &b);
+	fl_create_thread(recv_thread,thread_periodical,&b);
+	fl_create_thread(myfunc_thread,thread_periodical2,&b);
 	Fl::run();
 	return 0;
 }
@@ -112,14 +115,41 @@ void* thread_periodical(void* p)
 	{
 		Sleep(1000);
 		cout<<"sleep ends!"<<endl;
-		string s;
-		s=to_string(n);
 		Fl::lock();
 		//MyFunc();
 		b->receiveMsg();
 		Fl::awake();
 		Fl::unlock();
-		//Fl::awake(mycallback,b);
+	}
+	return 0L;
+}
+
+void* thread_periodical2(void* p)
+{
+	Bot* b = (Bot*) p;
+
+	while (1)
+	{
+		Sleep(5000);
+		cout<<"sleep 2 ends!"<<endl;
+		WindowList formerwindows;
+		formerwindows.copy(&openedwindows);
+		openedwindows.initialize();
+		MyFunc();
+		int intarray[10];
+		if (!formerwindows.compare(&openedwindows,intarray))
+		{
+			cout<<"your window list changes!"<<endl;
+			for (int i=0;i<10;i++)
+			{
+				if (intarray[i]==1)
+				{
+					cout<<"This window chages: "<<i<<endl;
+					//send the change to all friends
+					//haven't finished
+				}
+			}
+		}
 	}
 	return 0L;
 }
