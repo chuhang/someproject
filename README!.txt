@@ -15,3 +15,5 @@
 
 
 For now this is all what I can recall... Maybe there are other settings that I did but cannot remember, but I think the project will compile if you follow the above instructions.
+
+1/13/2014: THIS IMPLEMENTATION IS NOW ABANDONNED, DUE TO: SWITCHING TO QT!!!
